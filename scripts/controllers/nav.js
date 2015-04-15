@@ -8,7 +8,7 @@ $scope.signedIn = Auth.signedIn;
 
 $scope.logout = function(){
 	Auth.logout();
-	console.log("Logged out!");
+	toaster.pop('success', 'Logged out successfully');
 	$location.path('/');
 	
 
