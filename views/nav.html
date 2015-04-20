@@ -33,7 +33,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="" data-toggle="modal" data-target="#pasModal">
 							<i class="mdi-action-lock"></i>Change Password</a></li>
-							<li><a href='#' ng-click="logout()">
+							<li><a href="" ng-click="logout()">
 								<i class="mdi-action-exit-to-app"></i>Logout</a></li>
 							</ul>
 						</li>
@@ -41,6 +41,6 @@
 				</div>
 			</div>
 			<div ng-show="signedIn()" ng-include="'views/partials/changepass.html'"></div>
-			<div ng-show="signedIn()" ng-include="'views/partials/post.html'"></div>
+			<div ng-show="signedIn()" ng-include="'views/partials/post.html' "></div>
 		</nav>
 

@@ -1,65 +1,53 @@
-app.controller('AuthController', function($scope, $location, toaster, Auth) {
+'user strict';
 
-  if(Auth.signedIn()) {
+app.controller('AuthController', function($scope, $location, toaster, Auth){
+
+	if(Auth.signedIn()) {
     $location.path('/');
   }
 
-	$scope.register = function(user) {          
-    Auth.register(user)
-      .then(function() {
-        toaster.pop('success', "Registered successfully");
-        $location.path('/dashboard');
-      }, function(err) {
-        errMessage(err);
-      });
-  };
-
-	$scope.login = function(user) {
-     Auth.login(user)
-      .then(function() {
-        toaster.pop('success', "Logged in successfully");
-        $location.path('/dashboard');
-      }, function(err) {        
-        errMessage(err);
-      });    
+	$scope.register = function(user){
+		Auth.register(user).then(function() {
+			toaster.pop('success', 'Registered successfully');
+			//console.log("Register successfully!");
+			$location.path('/');
+		}, function(err){
+			toaster.pop('error', 'Oops, something went wrong!');
+			//console.log("Error...");
+		});
 	};
 
-	$scope.changePassword = function(user) {
-     Auth.changePassword(email, oldPass, newPass)
-      .then(function() {                        
-        
-        // Reset form
-        $scope.email = '';
-        $scope.oldPass = '';
-        $scope.newPass = '';
 
-        toaster.pop('success', "Password changed successfully");
-      }, function(err) {
-        errMessage(err);      
-      });
-  };
+	$scope.login = function(user){
 
-	function errMessage(err) {
 
-    var msg = "Unknown Error...";
+		Auth.login(user)
+		.then(function(){
+			toaster.pop('success', 'Logged in successfully');
+			//console.log("Logged in successfully!");
+			$location.path('/');
+		}, function(err){
+			toaster.pop('error', 'Oops, something went wrong!');
+			//console.log("Error...")
+		});
+	};
 
-    if(err && err.code) {
-      switch (err.code) {
-        case "EMAIL_TAKEN": 
-          msg = "This email has been taken"; break;          
-        case "INVALID_EMAIL": 
-          msg = "Invalid email"; break;          
-        case "NETWORK_ERROR": 
-          msg = "Network error"; break;          
-        case "INVALID_PASSWORD": 
-          msg = "Invalid password"; break;          
-        case "INVALID_USER":
-          msg = "Invalid user"; break;                  
-      } 
-    }   
+	$scope.changePassword = function(user){
 
-    toaster.pop('error', msg);
-  };
+		Auth.changePassword(user)
+		.then(function(){
 
+			//////// reset form
+
+			$scope.user.email = '';
+			$scope.user.oldPass = '';
+			$scope.user.newPass = '';
+
+
+			console.log("Password changed successfully!");
+		}, function(err){
+			console.log("Error...");
+		});
+	};
 
 });

@@ -2,32 +2,38 @@
 
 var app = angular
   .module('TaskNinjaApp', [
-    'ngAnimate',    
-    'ngResource',
+    'ngAnimate',
+    'ngResource',    
     'ngRoute',    
     'firebase',
-    'toaster',
-    'angularMoment'
+    'toaster'
   ])
   .constant('FURL', 'https://dariaaaan.firebaseio.com/')  
   .config(function ($routeProvider) {
     $routeProvider      
       .when('/', {
-        templateUrl: 'views/browse.html',
-        controller: 'BrowseController'     
+        templateUrl: 'views/browse.html'        
       })
-      .when('/browse/:taskId', {
-        templateUrl: 'views/browse.html',
-        controller: 'BrowseController'
-      })
-      .when('/register', {
-        templateUrl: 'views/register.html',
-        controller: 'AuthController'
-      })
-      .when('/login', {
+
+      .when('/login',{
         templateUrl: 'views/login.html',
         controller: 'AuthController'
       })
+
+
+      .when('/register',{
+        templateUrl: 'views/register.html',
+        controller: 'AuthController'
+      })
+
+
+      .when('/browse',{
+        templateUrl: 'views/browse.html',
+        controller: 'TaskController'
+
+      })
+
+
       .otherwise({
         redirectTo: '/'
       });
