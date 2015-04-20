@@ -1,74 +1,67 @@
 'use strict';
 
 app.factory('Auth', function(FURL, $firebaseAuth, $firebase) {
-
+  
   var ref = new Firebase(FURL);
   var auth = $firebaseAuth(ref);
 
+  var Auth = {
+    user: {},
 
-  var Auth ={
-
-
-    user: {}, 
-
-    createProfile: function(uid, user){
+    createProfile: function(uid, user) {
       var profile = {
         name: user.name,
-        emai: user.email,
+        email: user.email,
         gravatar: get_gravatar(user.email, 40)
       };
 
-
       var profileRef = $firebase(ref.child('profile'));
       return profileRef.$set(uid, profile);
-
-
     },
 
-    login: function(user){
+    login: function(user) {
       return auth.$authWithPassword(
-      {email: user.email, password: user.password}
+        {email: user.email, password: user.password}
       );
     },
 
-
-    register: function(user){
-      return auth.$createUser(
-      {email: user.email, password: user.password})
-      .then(function(){
-        return Auth.login(user);
-      })
-      .then(function(data){
-        return Auth.createProfile(data.uid, user);
-      });
+    register: function(user) {
+      return auth.$createUser({email: user.email, password: user.password})
+        .then(function() {
+          // authenticate so we have permission to write to Firebase
+          return Auth.login(user);
+        })
+        .then(function(data) {
+          // store user data in Firebase after creating account
+          return Auth.createProfile(data.uid, user);
+        });
     },
 
-    logout: function(){
+    logout: function() {
       auth.$unauth();
     },
 
-    changePassword: function(user){
-      return auth.$changePassword({email: user.email, oldPassword: user.oldpass, newPassword: user.newpass});
+    changePassword: function(user) {      
+      return auth.$changePassword({email: user.email, oldPassword: user.oldPass, newPassword: user.newPass});
     },
 
-    signedIn: function(){
-      return !!Auth.user.provider;
+    signedIn: function() {
+      return !!Auth.user.provider; //using !! means (0, undefined, null, etc) = false | otherwise = true
     }
   };
 
-
-  auth.$onAuth(function(authData){
-    if(authData){
+  auth.$onAuth(function(authData) {
+    if(authData) {      
       angular.copy(authData, Auth.user);
-      Auth.user.profile - $firebase(ref.child('profile').child(authData.uid)).$asObject();
+      Auth.user.profile = $firebase(ref.child('profile').child(authData.uid)).$asObject();      
     } else {
-      if (Auth.user && Auth.user.profile){
+      if(Auth.user && Auth.user.profile) {
         Auth.user.profile.$destroy();
       }
+
       angular.copy({}, Auth.user);
     }
   });
-
 
   function get_gravatar(email, size) {
 
@@ -296,7 +289,8 @@ app.factory('Auth', function(FURL, $firebaseAuth, $firebase) {
       var size = size || 80;
 
       return 'https://www.gravatar.com/avatar/' + MD5(email) + '.jpg?d=identicon';
-    };
+    }
 
-  return Auth;
+  return Auth;  
+
 });

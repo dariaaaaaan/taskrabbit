@@ -2,8 +2,8 @@
 
 var app = angular
   .module('TaskNinjaApp', [
-    'ngAnimate',
-    'ngResource',    
+    'ngAnimate',    
+    'ngResource',
     'ngRoute',    
     'firebase',
     'toaster',
@@ -14,28 +14,20 @@ var app = angular
     $routeProvider      
       .when('/', {
         templateUrl: 'views/browse.html',
-        controller: 'BrowseController'        
+        controller: 'BrowseController'     
       })
-
-      .when('/login',{
-        templateUrl: 'views/login.html',
-        controller: 'AuthController'
+      .when('/browse/:taskId', {
+        templateUrl: 'views/browse.html',
+        controller: 'BrowseController'
       })
-
-
-      .when('/register',{
+      .when('/register', {
         templateUrl: 'views/register.html',
         controller: 'AuthController'
       })
-
-
-      .when('/browse/:taskId',{
-        templateUrl: 'views/browse.html',
-        controller: 'BrowseController'
-
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'AuthController'
       })
-
-
       .otherwise({
         redirectTo: '/'
       });
